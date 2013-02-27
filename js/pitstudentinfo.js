@@ -36,6 +36,8 @@ objectEventHandler( o("fs"), "click", forwardStop );
 //=================================================
 objectEventHandler( o("match"), "keyup", search );
 //=================================================
+objectEventHandler( o("match"), "change", search );
+//=================================================
 objectEventHandler( document.body, "keydown", step );
 //=================================================
 objectEventHandler(o("btnClear"), "click", clearSearch );
@@ -78,12 +80,14 @@ var pointToFirstRecord = function(){
 //------------------------------------------------
 var nowShowRecord = function(){
     var record = records[recordPointer].split(",");
-    for( var i = 0; i< record.length; i++ ) {
+    o("field0").value = record[0];
+    for( var i = 1; i< record.length; i++ ) {
         o("field"+i.toString()).value = " " + record[i];
     }
     o("c").innerHTML = recordPointer;
     if( matchCount != 0 ){
         o('matchIndex').innerHTML = indexPointer +1;
+        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
     }    
 };
 //=============Reverse Button Handler===========
@@ -126,7 +130,7 @@ var pointToFinalRecord = function(){
 function fastForward(){
     if(greenLight){
         forward();
-        setTimeout(fastForward, delay);
+        callAfterMilliseconds(fastForward, delay);//setTimeout(fastForward, delay);
     }
     else greenLight = true;        
 }
@@ -163,10 +167,12 @@ function shortRedLight(){
 }
 //=================================================
 function search(){
-    if ( o("match").value === "" ) {
+    if ( o("match").value === "" ) {        
         shortRedLight();
         clearSearch();
+        o("match").focus();
         matchCount = 0;
+        o('sp').innerHTML = singularPlural("match", matchCount)+" ";        
         currentMatch = ""
         return;
     }
@@ -186,19 +192,23 @@ function search(){
             matchCount += 1;
         }
     }
+    o('sp').innerHTML = singularPlural("match", matchCount)+" ";   
     currentMatch = o("match").value.toLowerCase();
     
     indexPointer = 0;    
     if ( matchCount !== 0 ){
         recordPointer = matchIndexes[0];
         o('matchIndex').innerHTML = "1";
+        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
         nowShowRecord();
     }
     else{
-        o('matchCount').innerHTML = "0"
-        o('matchIndex').innerHTML = "0"
+        o('matchCount').innerHTML = "0";
+        o('sp').innerHTML = "matches ";
+        o('matchIndex').innerHTML = "0";
     }
     o('matchCount').innerHTML = matchCount.toString();
+    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
     //return false;
 }
 //=================================================
@@ -208,8 +218,11 @@ function matchFound(n){
 //=================================================
 function clearSearch(){
     o("match").value = "";
-    o("match").focus();
+    //o("match").blur();
+    o("btnClear").focus();
     o('matchCount').innerHTML = "0"
+    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
+    o('sp').innerHTML = "matches ";
     o('matchIndex').innerHTML = "0"
     indexPointer = 0;
     matchCount = 0;
@@ -220,36 +233,37 @@ function step(){
      else if( window.event.keyCode === 37 ) reverse();
 }
 //=================================================
+function senseChange(){
+ if (o("match").value.toLowerCase() !== currentMatch.toLowerCase()) search();
+ callAfterMilliseconds(senseChange,300);
+}
+//=================================================
 function init(){
     o("match").focus();
-    ajax.open("GET", "https://dl.dropbox.com/u/21142484/StudentNames/StudentsCV.csv", false);
+    ajax.open("GET", "https://dl.dropbox.com/u/21142484/StudentNames/StudentsCV.csv", true );
+    ajax.onreadystatechange = function() {
+        if ( ajax.readyState == 4 ){
+            if ( ajax.status == 200 || ajax.status == 0 ){
+                records = ajax.responseText.split("\r");
+                recordCount = records.length;
+                o("c").innerHTML = recordPointer;
+                o("m").innerHTML = recordCount - 1;
+                nowShowRecord();
+            }
+            else { 
+                if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();                
+            }            
+        }      
+    };
     ajax.send(null);
-    if ( ajax.status == 200 || ajax.status == 0 ){
-        records = ajax.responseText.split("\r");
-        recordCount = records.length;
-        o("c").innerHTML = recordPointer;
-        o("m").innerHTML = recordCount - 1;
-        nowShowRecord();
-    }
-    else alert("Trouble getting Data remotely.");   
 }
 //==============================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function singularPlural(word,count){
+    return ((count == 1)?word:word+"es");
+}
+//===============================================
+senseChange();
+//===============================================
 
 
 
