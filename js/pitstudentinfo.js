@@ -18,17 +18,17 @@ objectEventHandler( o("f"), "click", forward );
 //=================================================
 objectEventHandler( o("r"), "click", reverse );
 //=========================================================
-objectEventHandler( o("ff"), "mousedown", fastForward );
+//objectEventHandler( o("ff"), "mousedown", fastForward );
 //---------------------------------------------------------
-objectEventHandler( o("ff"), "mouseup", stopFastForward );
+//objectEventHandler( o("ff"), "mouseup", stopFastForward );
 //---------------------------------------------------------
-objectEventHandler( o("ff"), "mouseout", shortRedLight );
+//objectEventHandler( o("ff"), "mouseout", shortRedLight );
 //=========================================================
-objectEventHandler( o("fr"), "mousedown", fastReverse );
+//objectEventHandler( o("fr"), "mousedown", fastReverse );
 //---------------------------------------------------------
-objectEventHandler( o("fr"), "mouseup", stopFastReverse );
+//objectEventHandler( o("fr"), "mouseup", stopFastReverse );
 //---------------------------------------------------------
-objectEventHandler( o("fr"), "mouseout", shortRedLight );
+//objectEventHandler( o("fr"), "mouseout", shortRedLight );
 //=========================================================
 objectEventHandler( o("rs"), "click", reverseStop );
 //=================================================
