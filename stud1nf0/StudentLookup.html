@@ -9,7 +9,8 @@
             background-color: #ccffff;
         }
         body{
-            background-color: #97ACC4;
+            background-color:#eee; 
+            #97ACC4;
             #ddd;
         }
         table{
@@ -22,25 +23,22 @@
         #margin-bottom: 50px;
         #margin-right: 325px;
         #margin-left: 325px;
-        width: 475px; 
-        height: 710px;
-        border-radius: 10px;
-        box-shadow: 10px 10px 20px #373737;
+        width: 435px; 
+        height: 690px;
+        #border-radius: 10px;
+        #box-shadow: 10px 10px 20px #373737;
         }
     </style>
 </head>
 <body>
 <center>
 <article class="box">
-    <br>
     <fieldset>
     <div id = "div1"><h4>Active Students, Media Campus</h4></div>    
     <strong>
-    Student <span id='c'></span>
-    &nbsp;of&nbsp;
-    <span id='m'></span>
+       <center>Student <span id='c'>0</span> of <span id='m'>0</span></center> <br>   
+        <center>&mdash; <span id='matchIndex'>0</span> of <span id='matchCount' style="color: red;">0</span> matches  &mdash;</center>
     </strong>
-    <br><br>
     </fieldset>
     <fieldset>
         <table>
@@ -59,24 +57,22 @@
                 <tr><td>Other Phone </td><td><input id="field11" readonly size="25"></td></tr>                
             </tbody>
         </table>
-        <br><br>
+        <br>
         <img id="rs" src="../img/rs.png" width="30" height="30" style="cursor: pointer;">
          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <img id="r" src="../img/b.png" width="30" height="30" style="cursor: pointer;">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <img id="f" src="../img/f.png" width="30" height="30" style="cursor: pointer;">
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <img id="fs" src="../img/fs.png" width="30" height="30" style="cursor: pointer;">
     </fieldset>
     <fieldset>
         <strong>
-        Search: <input id="match" type="text"><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id='matchIndex'>0</span>
-        &nbsp;of&nbsp;
-        <span id='matchCount'>0</span>&nbsp;matches<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button id="btnClear">Clear Search</button>
+        Search: <input id="match" type="text">
         </strong>
+
+        <button id="btnClear">Clear Search</button>
+
     </fieldset>
 </article>
 </center>
