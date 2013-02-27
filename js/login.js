@@ -1,5 +1,5 @@
 window.onload = function(){
- //=========================DATA and OBJECTS=================
+//=========================DATA and OBJECTS=================
 var btnGo = o('btnPwd');
 var txtUser = o('txtUser');
 var txtPwd = o('txtPwd');
@@ -26,7 +26,7 @@ function go(){
     var userAjax = new HttpObject();
     userAjax.open("GET",users,false);
     userAjax.send(null);
-    if(userAjax.status !== 200){
+    if(userAjax.status !== 200 && userAjax !== 0){
       alert("Wrong Username and/or Password");
       txtPwd.focus();
       return;      
@@ -37,7 +37,7 @@ function go(){
       txtPwd.focus();
       return;
     }
-    location.assign(publink+txtPwd.value+"/StudentLookup.html");;
+    location.assign( "docs/StudentLookup.html" );
   }
 //==========================check username=================
   function chkUser(){
