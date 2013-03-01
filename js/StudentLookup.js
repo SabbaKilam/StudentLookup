@@ -264,9 +264,11 @@ function email1(){
         "cc="+o("field7").value;
         o("mail").click();
     }
+    /*
     callAfterMilliseconds(function(){
         o("mail").href="";
     },100);
+    */
 }
 //===============================================
 function email2(){
@@ -283,9 +285,11 @@ function email2(){
         "cc="+o("field6").value;
         o("mail").click();        
     }
+    /*
     callAfterMilliseconds(function(){
         o("mail").href="";
     },100);
+    */
 }
 //==============================================
 function singularPlural(word,count){
