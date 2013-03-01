@@ -3,39 +3,12 @@
 <head>
     <meta charset = "utf-8">
     <title>PIT Student Info</title>
-    <style>
-        input{
-            font-weight: bold;
-            background-color: #ccffff;
-        }
-        body{
-            background-color:#eee; 
-            #97ACC4;
-            #ddd;
-        }
-        table{
-            font-weight: bold;
-        }
-        .box{
-        background-color: #eee;
-        #fefefe;
-        margin-top: 5px;
-        #margin-bottom: 50px;
-        #margin-right: 325px;
-        #margin-left: 325px;
-            width: 100%;
-        #349px; 
-            height: 100%;
-        #600px;
-        #border-radius: 10px;
-        #box-shadow: 10px 10px 20px #373737;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/StudentLookup.css" >
 </head>
 <body>
 <center>
 <article class="box">
-    <span id="div1" style="font-weight:bold;">Active Students, Media Campus</span>  <br>
+    <span id="div1" style="font-weight:bold;">Active Students, Media Campus</span><br>
      <center>Student <span id='c'>0</span> of <span id='m'>0</span></center>
     <fieldset>
         <table>
@@ -51,17 +24,16 @@
                 <tr><td>Other Phone </td><td><input id="field11" readonly size="20"></td></tr>
                 <tr><td>Student ID </td><td><input id="field3" readonly size="20"></td></tr>
                 <tr><td>First Name </td><td><input id="field2" readonly size="20"></td></tr>                  
-                <tr><td>Last Name </td><td><input id="field1" readonly size="20"></td></tr>              
+                <tr><td>Last Name </td><td><input id="field1" readonly size="20"></td></tr>
+                <a id="mail" style="visibility: hidden;"></a>                
             </tbody>
         </table>
         <br>
         <img id="rs" src="../img/rs.png" width="30" height="30" style="cursor: pointer;">
          &nbsp;&nbsp;&nbsp;
         <img id="r" src="../img/b.png" width="30" height="30" style="cursor: pointer;">
-
         <strong><span id='matchIndex'>0</span> of <span id='matchCount' style="color: red;">0</span>
-        <span id="sp" >matches</strong> </span>
-
+        <span id="sp" >matches</strong></span>
         <img id="f" src="../img/f.png" width="30" height="30" style="cursor: pointer;">
         &nbsp;&nbsp;&nbsp;
         <img id="fs" src="../img/fs.png" width="30" height="30" style="cursor: pointer;">

@@ -29,6 +29,10 @@ objectEventHandler( o("match"), "change", search );
 objectEventHandler( document.body, "keydown", step );
 //=================================================
 objectEventHandler(o("btnClear"), "click", clearSearch );
+//=================================================
+objectEventHandler(o("field7"), "click", email2 );
+//=================================================
+objectEventHandler(o("field6"), "click", email1 );
 //==============Forward Button Handler=============
 function forward(){
     if ( notTooFar() ) pointToNextRecord();
@@ -36,7 +40,7 @@ function forward(){
     nowShowRecord();
 }
 //----------Details of forward button handler-------
-var notTooFar = function(){
+function notTooFar(){
     if ( o("match").value === ""  ){
         if ( recordPointer +1 < recordCount ) return true;
         else return false;
@@ -45,18 +49,18 @@ var notTooFar = function(){
         if ( indexPointer +1 < matchCount) return true;
         else return false;       
     }
-};
+}
 //-------------------------------------------------
-var pointToNextRecord = function(){
+function pointToNextRecord(){
     if( o("match").value === "" ){
         recordPointer++;
     }
     else{
         recordPointer = matchIndexes[++indexPointer];
     }
-};
+}
 //-------------------------------------------------
-var pointToFirstRecord = function(){
+function pointToFirstRecord(){
     if( o("match").value === "" ){
         recordPointer = 1;
     }
@@ -64,9 +68,9 @@ var pointToFirstRecord = function(){
         indexPointer = 0;
         recordPointer = matchIndexes[indexPointer];    
     }
-};
+}
 //------------------------------------------------
-var nowShowRecord = function(){
+function nowShowRecord(){
     var record = records[recordPointer].split(",");
     o("field0").value = record[0];
     for( var i = 1; i< record.length; i++ ) {
@@ -77,7 +81,7 @@ var nowShowRecord = function(){
         o('matchIndex').innerHTML = indexPointer +1;
         o('sp').innerHTML = singularPlural("match", matchCount)+" ";
     }    
-};
+}
 //=============Reverse Button Handler===========
 function reverse(){
     if ( notTooFarBack() ) pointToPreviousRecord();
@@ -244,6 +248,44 @@ function init(){
         }      
     };
     ajax.send(null);
+}
+//===============================================
+function email1(){
+    o("field6").select();
+    if ( confirm("OK to send email?") ){
+        o("mail").href="mailto:"+
+        o('field2').value+
+        " "+
+        o('field1').value+
+        " "+
+        "<"+
+        o("field6").value.trim()+
+        "> ?"+
+        "cc="+o("field7").value;
+        o("mail").click();
+    }
+    callAfterMilliseconds(function(){
+        o("mail").href="";
+    },100);
+}
+//===============================================
+function email2(){
+    o("field7").select();
+    if ( confirm("OK to send email?") ){
+        o("mail").href="mailto:"+
+        o('field2').value+
+        " "+
+        o('field1').value+
+        " "+
+        "<"+
+        o("field7").value.trim()+
+        "> ?"+
+        "cc="+o("field6").value;
+        o("mail").click();        
+    }
+    callAfterMilliseconds(function(){
+        o("mail").href="";
+    },100);
 }
 //==============================================
 function singularPlural(word,count){
