@@ -364,7 +364,7 @@ function pointer2(){
 //===============================================
 function dialNumber(id){
 if ( confirm("OK to dial number?") ){
-        o("mail").href="tel:" + o(id).value;       
+        o("mail").href="tel:+" + o(id).value;       
         o("mail").click();        
     }
 }
