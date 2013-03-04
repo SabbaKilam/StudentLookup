@@ -30,9 +30,17 @@ objectEventHandler( document.body, "keydown", step );
 //=================================================
 objectEventHandler(o("btnClear"), "click", clearSearch );
 //=================================================
+objectEventHandler(o("field6"), "click", email1 );
+//=================================================
 objectEventHandler(o("field7"), "click", email2 );
 //=================================================
-objectEventHandler(o("field6"), "click", email1 );
+objectEventHandler(o("field6"), "mouseover", pointer1 );
+//=================================================
+objectEventHandler(o("field7"), "mouseover", pointer2 );
+//=================================================
+objectEventHandler(o("field6"), "mouseout", pointer1 );
+//=================================================
+objectEventHandler(o("field7"), "mouseout", pointer2 );
 //==============Forward Button Handler=============
 function forward(){
     if ( notTooFar() ) pointToNextRecord();
@@ -210,7 +218,6 @@ function matchFound(n){
 //=================================================
 function clearSearch(){
     o("match").value = "";
-    //o("match").blur();
     o("btnClear").focus();
     o('matchCount').innerHTML = "0"
     o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
@@ -229,6 +236,8 @@ function senseChange(){
  if (o("match").value.toLowerCase() !== currentMatch.toLowerCase()) search();
  callAfterMilliseconds(senseChange,300);
 }
+//===============================================
+//senseChange();
 //=================================================
 function init(){
     o("match").focus();
@@ -251,7 +260,6 @@ function init(){
 }
 //===============================================
 function email1(){
-    o("field6").select();
     if ( confirm("OK to send email?") ){
         o("mail").href="mailto:"+
         o('field2').value+
@@ -264,7 +272,7 @@ function email1(){
         "cc="+o("field7").value;
         o("mail").click();
     }
-    /*
+    /* Purpose: to prevent the wrong person from being emailed
     callAfterMilliseconds(function(){
         o("mail").href="";
     },100);
@@ -272,7 +280,6 @@ function email1(){
 }
 //===============================================
 function email2(){
-    o("field7").select();
     if ( confirm("OK to send email?") ){
         o("mail").href="mailto:"+
         o('field2').value+
@@ -296,6 +303,71 @@ function singularPlural(word,count){
     return ((count == 1)?word:word+"es");
 }
 //===============================================
-senseChange();
+function deselect(){
+    //alert("typeof document.selection.empty(): "+typeof document.selection.empty())
+    try{
+        if ( typeof document.selection.empty() == "function" ){
+        document.selection.empty();
+        }
+    }
+    catch(e) {window.getSelection().removeAllRanges();}
+}
+/*
+For the problematic browser:
+document.selection.empty();
+For other browsers:
+window.getSelection().removeAllRanges();
+//-----------------------------------------------
+// clever: univeral event type identifier
+function eventType() {
+	if (!e) var e = window.event;
+	return e.type;
+}
+*/
 //===============================================
+function eventType() {
+	if (!e) var e = window.event;
+	return e.type;
+}
+//===============================================
+function pointer1(){
+    if ( eventType() == "mouseover" ){
+        o("field6").select();
+        o("field6").style.cursor="pointer";
+    }
+    else if ( eventType() == "mouseout" ){
+        //window.getSelection().removeAllRanges();
+        deselect();
+        o("field6").style.cursor="default"; 
+    }
+}
+//===============================================
+function pointer2(){
+    if ( eventType() == "mouseover" ){
+        o("field7").select();
+        o("field7").style.cursor="pointer";
+    }
+    else if ( eventType() == "mouseout" ){
+        //window.getSelection().removeAllRanges();
+        deselect();
+        o("field7").style.cursor="default"; 
+    }
+}
+//===============================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
