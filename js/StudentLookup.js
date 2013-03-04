@@ -41,6 +41,8 @@ objectEventHandler(o("field7"), "mouseover", pointer2 );
 objectEventHandler(o("field6"), "mouseout", pointer1 );
 //=================================================
 objectEventHandler(o("field7"), "mouseout", pointer2 );
+//=================================================
+objectEventHandler(o("field8"), "click", function(){dialNumber("field8")} ); //homephone
 //==============Forward Button Handler=============
 function forward(){
     if ( notTooFar() ) pointToNextRecord();
@@ -326,8 +328,14 @@ function eventType() {
 */
 //===============================================
 function eventType() {
-	if (!e) var e = window.event;
+	if ( !e ) var e = window.event;
 	return e.type;
+}
+//================================================
+function hello(){
+    if ( !e ) var e = window.event;
+    var caller = e.target || e.srcElement;
+    alert( caller );
 }
 //===============================================
 function pointer1(){
@@ -354,8 +362,13 @@ function pointer2(){
     }
 }
 //===============================================
-
-
+function dialNumber(id){
+if ( confirm("OK to dial number?") ){
+        o("mail").href="tel:" + o(id).value;       
+        o("mail").click();        
+    }
+}
+//===============================================
 
 
 
