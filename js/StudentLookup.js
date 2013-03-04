@@ -34,15 +34,19 @@ objectEventHandler(o("field6"), "click", email1 );
 //=================================================
 objectEventHandler(o("field7"), "click", email2 );
 //=================================================
-objectEventHandler(o("field6"), "mouseover", pointer1 );
+objectEventHandler(o("field6"), "mouseover", function(){pointer("field6");} );
 //=================================================
-objectEventHandler(o("field7"), "mouseover", pointer2 );
+objectEventHandler(o("field7"), "mouseover", function(){pointer("field7");} );
 //=================================================
-objectEventHandler(o("field6"), "mouseout", pointer1 );
+objectEventHandler(o("field6"), "mouseout", function(){pointer("field6");} );
 //=================================================
-objectEventHandler(o("field7"), "mouseout", pointer2 );
+objectEventHandler(o("field7"), "mouseout", function(){pointer("field7");} );
 //=================================================
-objectEventHandler(o("field8"), "click", function(){dialNumber("field8")} ); //homephone
+objectEventHandler(o("field8"), "click", function(){dialNumber("field8");} ); //homephone
+//=================================================
+objectEventHandler(o("field8"), "mouseover", function(){pointer("field8");} ); //homephone
+//=================================================
+objectEventHandler(o("field8"), "mouseout", function(){pointer("field8");} ); //homephone
 //==============Forward Button Handler=============
 function forward(){
     if ( notTooFar() ) pointToNextRecord();
@@ -283,7 +287,7 @@ function email1(){
 //===============================================
 function email2(){
     if ( confirm("OK to send email?") ){
-        o("mail").href="mailto:"+
+        document.location.href = "mailto:"+//o("mail").href = "mailto:"+
         o('field2').value+
         " "+
         o('field1').value+
@@ -292,7 +296,7 @@ function email2(){
         o("field7").value.trim()+
         "> ?"+
         "cc="+o("field6").value;
-        o("mail").click();        
+        //o("mail").click();        
     }
     /*
     callAfterMilliseconds(function(){
@@ -331,41 +335,20 @@ function eventType() {
 	if ( !e ) var e = window.event;
 	return e.type;
 }
-//================================================
-function hello(){
-    if ( !e ) var e = window.event;
-    var caller = e.target || e.srcElement;
-    alert( caller );
-}
 //===============================================
-function pointer1(){
+function pointer(id){
     if ( eventType() == "mouseover" ){
-        o("field6").select();
-        o("field6").style.cursor="pointer";
+        o(id).select();
+        o(id).style.cursor="pointer";
     }
     else if ( eventType() == "mouseout" ){
-        //window.getSelection().removeAllRanges();
         deselect();
-        o("field6").style.cursor="default"; 
-    }
-}
-//===============================================
-function pointer2(){
-    if ( eventType() == "mouseover" ){
-        o("field7").select();
-        o("field7").style.cursor="pointer";
-    }
-    else if ( eventType() == "mouseout" ){
-        //window.getSelection().removeAllRanges();
-        deselect();
-        o("field7").style.cursor="default"; 
+        o(id).style.cursor="default"; 
     }
 }
 //===============================================
 function dialNumber(id){
-if ( confirm("OK to dial number?") ){
-        //o("mail").href="tel:+" + o(id).value.trim();       
-        //o("mail").click();
+if ( confirm("OK to Dial Number?") ){
         document.location.href = "tel:+1-" + o(id).value.trim(); 
     }
 }
