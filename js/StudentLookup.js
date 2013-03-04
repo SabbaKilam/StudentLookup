@@ -30,9 +30,9 @@ objectEventHandler( document.body, "keydown", step );
 //=================================================
 objectEventHandler(o("btnClear"), "click", clearSearch );
 //=================================================
-objectEventHandler(o("field6"), "click", email1 );
+objectEventHandler(o("field6"), "click", function(){email(6);} );
 //=================================================
-objectEventHandler(o("field7"), "click", email2 );
+objectEventHandler(o("field7"), "click", function(){email(7);} );
 //=================================================
 objectEventHandler(o("field6"), "mouseover", function(){pointer("field6");} );
 //=================================================
@@ -265,44 +265,18 @@ function init(){
     ajax.send(null);
 }
 //===============================================
-function email1(){
+function email(num){
     if ( confirm("OK to send email?") ){
-        o("mail").href="mailto:"+
+        document.location.href = "mailto:"+
         o('field2').value+
         " "+
         o('field1').value+
         " "+
         "<"+
-        o("field6").value.trim()+
+        o("field"+num).value.trim()+
         "> ?"+
-        "cc="+o("field7").value;
-        o("mail").click();
+        "cc="+o( ( num == 6 ) ? "field6" : "field7" ).value;       
     }
-    /* Purpose: to prevent the wrong person from being emailed
-    callAfterMilliseconds(function(){
-        o("mail").href="";
-    },100);
-    */
-}
-//===============================================
-function email2(){
-    if ( confirm("OK to send email?") ){
-        document.location.href = "mailto:"+//o("mail").href = "mailto:"+
-        o('field2').value+
-        " "+
-        o('field1').value+
-        " "+
-        "<"+
-        o("field7").value.trim()+
-        "> ?"+
-        "cc="+o("field6").value;
-        //o("mail").click();        
-    }
-    /*
-    callAfterMilliseconds(function(){
-        o("mail").href="";
-    },100);
-    */
 }
 //==============================================
 function singularPlural(word,count){
