@@ -364,9 +364,9 @@ function pointer2(){
 //===============================================
 function dialNumber(id){
 if ( confirm("OK to dial number?") ){
-        o("mail").href="tel:+" + o(id).value.trim();       
+        //o("mail").href="tel:+" + o(id).value.trim();       
         //o("mail").click();
-        document.location.href = 1 +"-" +o(id).value.trim();
+        document.location.href = "tel:+1-" + o(id).value.trim(); 
     }
 }
 //===============================================
