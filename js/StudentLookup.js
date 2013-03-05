@@ -17,7 +17,7 @@ objectEventHandler( window, "load", init );
 objectEventHandler( o("f"), "click", forward );
 //=================================================
 objectEventHandler( o("r"), "click", reverse );
-//=========================================================
+//==================================================
 objectEventHandler( o("rs"), "click", reverseStop );
 //=================================================
 objectEventHandler( o("fs"), "click", forwardStop );
@@ -26,27 +26,23 @@ objectEventHandler( o("match"), "keyup", search );
 //=================================================
 objectEventHandler( o("match"), "change", search );
 //=================================================
-objectEventHandler( document.body, "keydown", step );
+objectEventHandler( document.body, "keydown", showNext );
 //=================================================
 objectEventHandler(o("btnClear"), "click", clearSearch );
 //=================================================
-objectEventHandler(o("field6"), "click", function(){email(6);} );
+var emailFields = ["field6","field7"];
+forAll( emailFields, function( field ) {
+    objectEventHandler( o(field), "click", function(){sendEmail(field);} );
+    objectEventHandler( o(field), "mouseover", function(){pointer(field);} );
+    objectEventHandler( o(field), "mouseout", function(){pointer(field);} );
+});
 //=================================================
-objectEventHandler(o("field7"), "click", function(){email(7);} );
-//=================================================
-objectEventHandler(o("field6"), "mouseover", function(){pointer("field6");} );
-//=================================================
-objectEventHandler(o("field7"), "mouseover", function(){pointer("field7");} );
-//=================================================
-objectEventHandler(o("field6"), "mouseout", function(){pointer("field6");} );
-//=================================================
-objectEventHandler(o("field7"), "mouseout", function(){pointer("field7");} );
-//=================================================
-objectEventHandler(o("field8"), "click", function(){dialNumber("field8");} ); //homephone
-//=================================================
-objectEventHandler(o("field8"), "mouseover", function(){pointer("field8");} ); //homephone
-//=================================================
-objectEventHandler(o("field8"), "mouseout", function(){pointer("field8");} ); //homephone
+var phoneFields = ["field8","field9","field10","field11"]
+forAll( phoneFields, function( field ){
+    objectEventHandler(o(field), "click", function(){dialNumber(field);} ); 
+    objectEventHandler(o(field), "mouseover", function(){pointer(field);} ); 
+    objectEventHandler(o(field), "mouseout", function(){pointer(field);} ); 
+});
 //==============Forward Button Handler=============
 function forward(){
     if ( notTooFar() ) pointToNextRecord();
@@ -85,7 +81,12 @@ function pointToFirstRecord(){
 }
 //------------------------------------------------
 function nowShowRecord(){
-    var record = records[recordPointer].split(",");
+    try{
+        var record = records[recordPointer].split(",");
+    }
+    catch(err){
+        return; //in case records[recordPointer] is undefined and can't split()
+    }
     o("field0").value = record[0];
     for( var i = 1; i< record.length; i++ ) {
         o("field"+i.toString()).value = " " + record[i];
@@ -178,18 +179,22 @@ function search(){
         clearSearch();
         o("match").focus();
         matchCount = 0;
-        o('sp').innerHTML = singularPlural("match", matchCount)+" ";        
+        o('sp').innerHTML = singularPlural("match", matchCount);        
         currentMatch = ""
         return;
     }
     //---------------------------------------------
-    if ( (typeof window.event != undefined) && window.event.keyCode === 13 ){ 
-        forward();
-        return;
+    try{
+        if ( (typeof window.event != undefined) && window.event.keyCode === 13 ){ 
+            forward();
+            return;
+        }
     }
-    else if( o("match").value.toLowerCase() == currentMatch.toLowerCase() ){
-        return;
+    catch(err) 
+    {
+        if( o("match").value.toLowerCase() == currentMatch.toLowerCase() ) return;
     }
+    
     matchCount = 0;
     matchIndexes.length = 0;
     for ( var i = 1; i < recordCount; i++){
@@ -198,14 +203,14 @@ function search(){
             matchCount += 1;
         }
     }
-    o('sp').innerHTML = singularPlural("match", matchCount)+" ";   
+    o('sp').innerHTML = singularPlural("match", matchCount);   
     currentMatch = o("match").value.toLowerCase();
     
     indexPointer = 0;    
     if ( matchCount !== 0 ){
         recordPointer = matchIndexes[0];
         o('matchIndex').innerHTML = "1";
-        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
+        o('sp').innerHTML = singularPlural("match", matchCount);
         nowShowRecord();
     }
     else{
@@ -214,37 +219,25 @@ function search(){
         o('matchIndex').innerHTML = "0";
     }
     o('matchCount').innerHTML = matchCount.toString();
-    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
-    //return false;
+    o('sp').innerHTML = singularPlural("match", matchCount);    
 }
 //=================================================
-function matchFound(n){
-    return records[n].toLowerCase().indexOf(o("match").value.toLowerCase() ) != -1;
+function matchFound(i){
+    return records[i].toLowerCase().indexOf(o("match").value.toLowerCase() ) != -1;
 }
 //=================================================
 function clearSearch(){
     o("match").value = "";
     o("btnClear").focus();
     o('matchCount').innerHTML = "0"
-    o('sp').innerHTML = singularPlural("match", matchCount)+" ";    
+    o('sp').innerHTML = singularPlural("match", matchCount)    
     o('sp').innerHTML = "matches ";
     o('matchIndex').innerHTML = "0"
     indexPointer = 0;
     matchCount = 0;
 }
 //=================================================
-function step(){
-     if ( window.event.keyCode === 39 ) forward();
-     else if( window.event.keyCode === 37 ) reverse();
-}
-//=================================================
-function senseChange(){
- if (o("match").value.toLowerCase() !== currentMatch.toLowerCase()) search();
- callAfterMilliseconds(senseChange,300);
-}
-//===============================================
-//senseChange();
-//=================================================
+
 function init(){
     o("match").focus();
     ajax.open("GET", "https://dl.dropbox.com/u/21142484/StudentNames/StudentsCV.csv", true );
@@ -265,17 +258,17 @@ function init(){
     ajax.send(null);
 }
 //===============================================
-function email(num){
-    if ( confirm("OK to send email?") ){
+function sendEmail(id){
+    if ( confirm("OK to send email?") ){        
         document.location.href = "mailto:"+
         o('field2').value+
         " "+
         o('field1').value+
         " "+
         "<"+
-        o("field"+num).value.trim()+
+        o(id).value.trim()+
         "> ?"+
-        "cc="+o( ( num == 6 ) ? "field6" : "field7" ).value;       
+        "cc="+o( ( id === "field6" ) ? "field7" : "field6" ).value;
     }
 }
 //==============================================
@@ -286,24 +279,12 @@ function singularPlural(word,count){
 function deselect(){
     //alert("typeof document.selection.empty(): "+typeof document.selection.empty())
     try{
-        if ( typeof document.selection.empty() == "function" ){
+        if ( typeof document.selection.empty() == "function" ){  // IE
         document.selection.empty();
         }
     }
-    catch(e) {window.getSelection().removeAllRanges();}
+    catch(e) {window.getSelection().removeAllRanges();}  // Most Browsers
 }
-/*
-For the problematic browser:
-document.selection.empty();
-For other browsers:
-window.getSelection().removeAllRanges();
-//-----------------------------------------------
-// clever: univeral event type identifier
-function eventType() {
-	if (!e) var e = window.event;
-	return e.type;
-}
-*/
 //===============================================
 function eventType() {
 	if ( !e ) var e = window.event;
@@ -322,11 +303,25 @@ function pointer(id){
 }
 //===============================================
 function dialNumber(id){
-if ( confirm("OK to Dial Number?") ){
-        document.location.href = "tel:+1-" + o(id).value.trim(); 
-    }
+    if ( o(id).value.trim() !== null && o(id).value.trim() !== "*" && o(id).value.trim() !== ""  ){
+        if ( confirm("OK to Dial Number?")  ) {
+            document.location.href = "tel:+1-" + o(id).value.trim(); 
+        }
+    }    
 }
 //===============================================
+function showNext(){
+     if ( window.event.keyCode === 39 ) forward();
+     else if( window.event.keyCode === 37 ) reverse();
+}
+//=================================================
+function senseChange(){
+ if (o("match").value.toLowerCase() !== currentMatch.toLowerCase()) search();
+ callAfterMilliseconds( senseChange,300 );
+}
+//===============================================
+senseChange();
+//=================================================
 
 
 
