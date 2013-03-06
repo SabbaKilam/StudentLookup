@@ -61,9 +61,9 @@ ajaxUploadsFiles = function() {//http://blog.new-bamboo.co.uk/2012/01/10/ridicul
         return o.getElementsByTagName(s);
     }
 //=======================================================    
-function forAll(array, action) {
+function forAll(array, aFunction) {
   for (var i = 0; i < array.length; i++)
-    action(array[i]);
+    aFunction(array[i]);
 }
 //=================================================
 forTwoArrays = function(ary1, ary2, action){

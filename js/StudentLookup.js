@@ -20,23 +20,17 @@ objectEventHandler( o("match"), "change", search );
 //=================================================
 objectEventHandler( document.body, "keydown", showNext );
 //=================================================
-var phoneFields = ["field8","field9","field10","field11"];
-forAll( phoneFields, function( field ){
-    objectEventHandler(o(field), "click", function(){dialNumber(field);} ); 
-    objectEventHandler(o(field), "mouseover", function(){pointer(field);} ); 
-    objectEventHandler(o(field), "mouseout", function(){pointer(field);} ); 
+var actionFields = ["field6","field7","field8","field9","field10","field11"];
+forAll( actionFields, function( field ){
+    objectEventHandler(o(field), "mouseover", function() { highlight(field); } ); 
+    objectEventHandler(o(field), "mouseout", function() { highlight(field); } );
+    objectEventHandler(o(field), "click", function() { emailOrCall(field); } );     
 });
 //=================================================
-var emailFields = ["field6","field7"];
-forAll( emailFields, function( field ){
-    objectEventHandler( o(field), "mouseover" ,function(){pointer(field)} );
-    objectEventHandler( o(field), "click", function(){ sendEmail(field) } );
-});
-//=================================================
-var objects = ["f","r","rs","fs","btnClear"];
+var buttons = ["f","r","rs","fs","btnClear"];
 var handlers = [forward,reverse,reverseStop,forwardStop,clearSearch];
-forTwoArrays(objects, handlers, function(object,handler){
-    objectEventHandler(o(object), "click", handler);
+forTwoArrays(buttons, handlers, function(button,handler){
+    objectEventHandler(o(button), "click", handler);
 });
 //==============Forward Button Handler=============
 function forward(){
@@ -89,7 +83,7 @@ function nowShowRecord(){
     o("c").innerHTML = recordPointer;
     if( matchCount != 0 ){
         o('matchIndex').innerHTML = indexPointer +1;
-        o('sp').innerHTML = singularPlural("match", matchCount)+" ";
+        o('sp').innerHTML = singularPlural("match", matchCount);
     }    
 }
 //=============Reverse Button Handler===========
@@ -232,7 +226,6 @@ function clearSearch(){
     matchCount = 0;
 }
 //=================================================
-
 function init(){
     o("match").focus();
     ajax.open("GET", "https://dl.dropbox.com/u/21142484/StudentNames/StudentsCV.csv", true );
@@ -246,27 +239,13 @@ function init(){
                 nowShowRecord();
             }
             else { 
-                if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();                
+                if ( confirm("Trouble getting Data remotely.\r\rClick OK to try again.") ) init();
             }            
         }      
     };
     ajax.send(null);
 }
 //===============================================
-function sendEmail(id){
-    if ( confirm("OK to send email?") ){        
-        document.location.href = "mailto:"+
-        o('field2').value+
-        " "+
-        o('field1').value+
-        " "+
-        "<"+
-        o(id).value.trim()+
-        "> ?"+
-        "cc="+o( ( id === "field6" ) ? "field7" : "field6" ).value;
-    }
-}
-//==============================================
 function singularPlural(word,count){
     return ((count == 1)?word:word+"es");
 }
@@ -285,7 +264,7 @@ function eventType() {
 	return e.type;
 }
 //===============================================
-function pointer(id){
+function highlight(id){
     if ( eventType() == "mouseover" ){
         o(id).select();
         o(id).style.cursor="pointer";
@@ -296,7 +275,30 @@ function pointer(id){
     }
 }
 //===============================================
-function dialNumber(id){
+function emailOrCall( id ){
+    if( o(id) == o("field6") || o(id) == o("field7") ){
+        sendEmail(id);
+    }
+    else{
+        callNumber(id);
+    }
+}
+//===============================================
+function sendEmail(id){
+    if ( confirm("OK to send email?") ){        
+        document.location.href = "mailto:"+
+        o('field2').value+
+        " "+
+        o('field1').value+
+        " "+
+        "<"+
+        o(id).value.trim()+
+        "> ?"+
+        "cc="+o( ( id === "field6" ) ? "field7" : "field6" ).value;
+    }
+}
+//==============================================
+function callNumber(id){
     if ( o(id).value.trim() !== null && o(id).value.trim() !== "*" && o(id).value.trim() !== ""  ){
         if ( confirm("OK to Dial Number?")  ) {
             document.location.href = "tel:" + o(id).value.trim(); 
@@ -310,8 +312,10 @@ function showNext(){
 }
 //=================================================
 function senseChange(){
- if (o("match").value.toLowerCase() !== currentMatch.toLowerCase()) search();
- callAfterMilliseconds( senseChange,300 );
+    if ( o("match").value.toLowerCase() !== currentMatch.toLowerCase() ){
+        search();
+    }
+    callAfterMilliseconds( senseChange,300 );
 }
 //===============================================
 senseChange();
