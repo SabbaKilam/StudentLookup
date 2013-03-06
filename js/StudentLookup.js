@@ -14,34 +14,29 @@ var ajax = new HttpObject()
 //==============Handlers and Functions=============
 objectEventHandler( window, "load", init );
 //=================================================
-objectEventHandler( o("f"), "click", forward );
-//=================================================
-objectEventHandler( o("r"), "click", reverse );
-//==================================================
-objectEventHandler( o("rs"), "click", reverseStop );
-//=================================================
-objectEventHandler( o("fs"), "click", forwardStop );
-//=================================================
 objectEventHandler( o("match"), "keyup", search );
 //=================================================
 objectEventHandler( o("match"), "change", search );
 //=================================================
 objectEventHandler( document.body, "keydown", showNext );
 //=================================================
-objectEventHandler(o("btnClear"), "click", clearSearch );
-//=================================================
-var emailFields = ["field6","field7"];
-forAll( emailFields, function( field ) {
-    objectEventHandler( o(field), "click", function(){sendEmail(field);} );
-    objectEventHandler( o(field), "mouseover", function(){pointer(field);} );
-    objectEventHandler( o(field), "mouseout", function(){pointer(field);} );
-});
-//=================================================
-var phoneFields = ["field8","field9","field10","field11"]
+var phoneFields = ["field8","field9","field10","field11"];
 forAll( phoneFields, function( field ){
     objectEventHandler(o(field), "click", function(){dialNumber(field);} ); 
     objectEventHandler(o(field), "mouseover", function(){pointer(field);} ); 
     objectEventHandler(o(field), "mouseout", function(){pointer(field);} ); 
+});
+//=================================================
+var emailFields = ["field6","field7"];
+forAll( emailFields, function( field ){
+    objectEventHandler( o(field), "mouseover" ,function(){pointer(field)} );
+    objectEventHandler( o(field), "click", function(){ sendEmail(field) } );
+});
+//=================================================
+var objects = ["f","r","rs","fs","btnClear"];
+var handlers = [forward,reverse,reverseStop,forwardStop,clearSearch];
+forTwoArrays(objects, handlers, function(object,handler){
+    objectEventHandler(o(object), "click", handler);
 });
 //==============Forward Button Handler=============
 function forward(){
@@ -277,7 +272,6 @@ function singularPlural(word,count){
 }
 //===============================================
 function deselect(){
-    //alert("typeof document.selection.empty(): "+typeof document.selection.empty())
     try{
         if ( typeof document.selection.empty() == "function" ){  // IE
         document.selection.empty();
@@ -305,7 +299,7 @@ function pointer(id){
 function dialNumber(id){
     if ( o(id).value.trim() !== null && o(id).value.trim() !== "*" && o(id).value.trim() !== ""  ){
         if ( confirm("OK to Dial Number?")  ) {
-            document.location.href = "tel:+1-" + o(id).value.trim(); 
+            document.location.href = "tel:" + o(id).value.trim(); 
         }
     }    
 }
@@ -322,18 +316,3 @@ function senseChange(){
 //===============================================
 senseChange();
 //=================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
