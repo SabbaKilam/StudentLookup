@@ -21,7 +21,7 @@ objectEventHandler( o("match"), "change", search );
 objectEventHandler( document.body, "keydown", showNext );
 //=================================================
 var actionFields = ["field6","field7","field8","field9","field10","field11"];
-forAll( actionFields, function( field ){
+forAll( actionFields, function( field ) {
     objectEventHandler(o(field), "mouseover", function() { highlight(field); } ); 
     objectEventHandler(o(field), "mouseout", function() { highlight(field); } );
     objectEventHandler(o(field), "click", function() { emailOrCall(field); } );     
